@@ -11,6 +11,7 @@ namespace ConfigServer.Common
     public class Global
     {
         public const string ROUTE_PX = "/api/config";
+        public const int REDIS_DB = 11;
         public static BaseBuss BUSS = new BaseBuss();
         public static Dictionary<string, Dictionary<string, ConfigGroup>> ConfigList;
 
@@ -21,8 +22,16 @@ namespace ConfigServer.Common
                 DatabaseOperationWeb.TYPE = new DBManager();
             }
 
-            new ConfigDao().GetConfigAll();
+            new ConfigBuss().GetConfigAll();
 
+        }
+
+        public static string Redis
+        {
+            get
+            {
+                return Environment.GetEnvironmentVariable("Redis");
+            }
         }
 
         public static string DBUrl

@@ -36,8 +36,9 @@ namespace ConfigServer.Dao
             return list;
         }
 
-        public void GetConfigAll()
+        public Dictionary<string, Dictionary<string, ConfigGroup>> GetConfigAll()
         {
+            Dictionary<string, Dictionary<string, ConfigGroup>> dict = new Dictionary<string, Dictionary<string, ConfigGroup>>();
             StringBuilder builder = new StringBuilder();
             builder.AppendFormat(ConfigSqls.SELECT_CONFIG_ALL);
             string sql = builder.ToString();
@@ -45,7 +46,6 @@ namespace ConfigServer.Dao
             if (dt != null)
             {
                 List<ConfigItem> list = new List<ConfigItem>();
-                Global.ConfigList = new Dictionary<string, Dictionary<string, ConfigGroup>>();
                 string env = "";
                 string group = "";
 
@@ -54,16 +54,16 @@ namespace ConfigServer.Dao
                     if(env != dr["CONFIG_ENV"].ToString())
                     {
                         env = dr["CONFIG_ENV"].ToString();
-                        Global.ConfigList.Add(env, new Dictionary<string, ConfigGroup>());
+                        dict.Add(env, new Dictionary<string, ConfigGroup>());
                     }
 
                     if (group != dr["CONFIG_GROUP"].ToString())
                     {
                         group = dr["CONFIG_GROUP"].ToString();
-                        Global.ConfigList[env].Add(group, new ConfigGroup(group));
+                        dict[env].Add(group, new ConfigGroup(group));
                     }
 
-                    var curList = Global.ConfigList[env][group].list;
+                    var curList = dict[env][group].list;
 
                     ConfigItem ConfigItem = new ConfigItem
                     {
@@ -73,6 +73,7 @@ namespace ConfigServer.Dao
                     curList.Add(ConfigItem);
                 }
             }
+            return dict;
         }
     }
 
@@ -83,7 +84,7 @@ namespace ConfigServer.Dao
                 + "FROM T_BUSS_CONFIG "
                 + "WHERE IF_USE = 1 "
                 + "AND CONFIG_ENV = '{0}' "
-                + "AND GROUP = '{1}' "
+                + "AND CONFIG_GROUP = '{1}' "
                 + "ORDER BY CONFIG_KEY";
         public const string SELECT_CONFIG_ALL = ""
                 + "SELECT * "

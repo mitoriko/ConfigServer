@@ -1,6 +1,7 @@
 ﻿using ConfigServer.Common;
 using ConfigServer.Dao;
 using Newtonsoft.Json;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,10 +60,31 @@ namespace ConfigServer.Buss
 
                 Global.ConfigList[updateConfigParam.env][updateConfigParam.group].list = list;
 
+                topic(updateConfigParam.env, updateConfigParam.group);
                 return Global.ConfigList[updateConfigParam.env][updateConfigParam.group];
             }
 
             throw new ApiException(CodeMessage.InvalidEnvAndGroup, "InvalidEnvAndGroup");
+        }
+
+        public void GetConfigAll()
+        {
+            ConfigDao configDao = new ConfigDao();
+            Global.ConfigList = configDao.GetConfigAll();
+            foreach(string env in Global.ConfigList.Keys)
+            {
+                foreach (string group in Global.ConfigList[env].Keys)
+                {
+                    topic(env, group);
+                }
+            }
+        }
+
+        private void topic(string env, string group)
+        {
+            var redis = RedisManager.getRedisConn();
+            var db = redis.GetDatabase(Global.REDIS_DB);
+            db.Publish(RedisManager.ConfigServerTopic(env, group), "update");
         }
     }
 }
