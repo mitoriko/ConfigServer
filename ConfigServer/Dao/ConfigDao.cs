@@ -54,6 +54,7 @@ namespace ConfigServer.Dao
                     if(env != dr["CONFIG_ENV"].ToString())
                     {
                         env = dr["CONFIG_ENV"].ToString();
+                        group = "";
                         dict.Add(env, new Dictionary<string, ConfigGroup>());
                     }
 

@@ -1,5 +1,6 @@
 ﻿using ConfigServer.Common;
 using ConfigServer.Dao;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -158,7 +159,7 @@ namespace ConfigServer.Buss
         /// <param name="controller">控制器</param>
         /// <param name="baseApi">传入参数</param>
         /// <returns></returns>
-        public object BussResults(Controller controller, BaseApi baseApi)
+        public object BussResults(Controller controller, BaseApi baseApi, IHttpContextAccessor accessor)
         {
             Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "; " + Global.ROUTE_PX + "/" + controller.RouteData.Values["controller"] + "/" + controller.RouteData.Values["action"]);
             Console.WriteLine(baseApi.ToString());
@@ -173,6 +174,7 @@ namespace ConfigServer.Buss
             }
 
         }
+
         /// <summary>
         /// Header传递关键参数处理方法
         /// </summary>
