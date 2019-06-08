@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -153,6 +154,13 @@ namespace ConfigServer.Buss
             return msg;
         }
 
+        private Message CheckWhiteList(BaseApi baseApi, IPAddress iPAddress)
+        {
+            Message msg = null;
+            
+            return msg;
+        }
+
         /// <summary>
         /// 处理方法
         /// </summary>
@@ -161,14 +169,16 @@ namespace ConfigServer.Buss
         /// <returns></returns>
         public object BussResults(Controller controller, BaseApi baseApi, IHttpContextAccessor accessor)
         {
+            var ips = accessor.HttpContext.Connection.RemoteIpAddress;
+            Console.WriteLine("------------------------addr:" + ips.ToString());
             Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "; " + Global.ROUTE_PX + "/" + controller.RouteData.Values["controller"] + "/" + controller.RouteData.Values["action"]);
             Console.WriteLine(baseApi.ToString());
             switch (baseApi.GetInputType())
             {
                 case InputType.Header:
-                    return this.HeaderBussResults(controller, baseApi);
+                    return this.HeaderBussResults(controller, baseApi, ips);
                 case InputType.Body:
-                    return this.BodyBussResults(controller, baseApi);
+                    return this.BodyBussResults(controller, baseApi, ips);
                 default:
                     return null;
             }
@@ -181,7 +191,7 @@ namespace ConfigServer.Buss
         /// <param name="controller">控制器</param>
         /// <param name="baseApi">传入参数</param>
         /// <returns></returns>
-        private object HeaderBussResults(Controller controller, BaseApi baseApi)
+        private object HeaderBussResults(Controller controller, BaseApi baseApi, IPAddress iPAddress)
         {
             var route = "";
             var action = "";
@@ -217,6 +227,9 @@ namespace ConfigServer.Buss
                     break;
                 case CheckType.Sign:
                     msg = CheckSign(baseApi, route);
+                    break;
+                case CheckType.WhiteList:
+                    msg = CheckWhiteList(baseApi, iPAddress);
                     break;
                 default:
                     break;
@@ -277,7 +290,7 @@ namespace ConfigServer.Buss
         /// <param name="controller">控制器</param>
         /// <param name="baseApi">传入参数</param>
         /// <returns></returns>
-        private object BodyBussResults(Controller controller, BaseApi baseApi)
+        private object BodyBussResults(Controller controller, BaseApi baseApi, IPAddress iPAddress)
         {
             var route = "";
             var action = "";
@@ -298,6 +311,9 @@ namespace ConfigServer.Buss
                     break;
                 case CheckType.Sign:
                     msg = CheckSign(baseApi, route);
+                    break;
+                case CheckType.WhiteList:
+                    msg = CheckWhiteList(baseApi, iPAddress);
                     break;
                 default:
                     break;

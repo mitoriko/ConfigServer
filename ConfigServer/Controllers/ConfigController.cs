@@ -27,5 +27,21 @@ namespace ConfigServer.Controllers
                 return Json(new ResultsJson(new Message(CodeMessage.PostNull, "PostNull"), null));
             return Json(Global.BUSS.BussResults(this, openApi, _accessor));
         }
+
+        [HttpPost]
+        public ActionResult Dev([FromBody]DevApi devApi)
+        {
+            if (devApi == null)
+                return Json(new ResultsJson(new Message(CodeMessage.PostNull, "PostNull"), null));
+            return Json(Global.BUSS.BussResults(this, devApi, _accessor));
+        }
+
+        [HttpPost]
+        public ActionResult Pro([FromBody]ProApi proApi)
+        {
+            if (proApi == null)
+                return Json(new ResultsJson(new Message(CodeMessage.PostNull, "PostNull"), null));
+            return Json(Global.BUSS.BussResults(this, proApi, _accessor));
+        }
     }
 }

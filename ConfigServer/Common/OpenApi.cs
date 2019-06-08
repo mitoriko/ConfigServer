@@ -12,6 +12,8 @@ namespace ConfigServer.Common
     public enum ApiType
     {
         OpenApi,
+        DevApi,
+        ProApi,
     }
 
     public enum CheckType
@@ -20,6 +22,7 @@ namespace ConfigServer.Common
         Token,
         OpenToken,
         Sign,
+        WhiteList,
     }
 
     public enum InputType
@@ -70,6 +73,44 @@ namespace ConfigServer.Common
         public override ApiType GetApiType()
         {
             return ApiType.OpenApi;
+        }
+
+    }
+
+    public class DevApi : BaseApi
+    {
+        public override CheckType GetCheckType()
+        {
+            return CheckType.Open;
+        }
+
+        public override InputType GetInputType()
+        {
+            return InputType.Body;
+        }
+
+        public override ApiType GetApiType()
+        {
+            return ApiType.DevApi;
+        }
+
+    }
+
+    public class ProApi : BaseApi
+    {
+        public override CheckType GetCheckType()
+        {
+            return CheckType.WhiteList;
+        }
+
+        public override InputType GetInputType()
+        {
+            return InputType.Body;
+        }
+
+        public override ApiType GetApiType()
+        {
+            return ApiType.ProApi;
         }
 
     }

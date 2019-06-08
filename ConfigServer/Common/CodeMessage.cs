@@ -29,5 +29,6 @@ namespace ConfigServer.Common
         InvalidCode = 4007,
 
         InvalidEnvAndGroup = 5000,
+        NoAccessForGroup = 5001,
     }
 }
