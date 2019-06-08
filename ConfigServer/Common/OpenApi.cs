@@ -62,7 +62,7 @@ namespace ConfigServer.Common
     {
         public override CheckType GetCheckType()
         {
-            return CheckType.Open;
+            return CheckType.WhiteList;
         }
 
         public override InputType GetInputType()
