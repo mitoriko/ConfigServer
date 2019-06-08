@@ -34,6 +34,14 @@ namespace ConfigServer.Common
             }
         }
 
+        public static string RouteIp
+        {
+            get
+            {
+                return Environment.GetEnvironmentVariable("RouteIp");
+            }
+        }
+
         public static string DBUrl
         {
             get

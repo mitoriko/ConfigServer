@@ -27,6 +27,7 @@ namespace ConfigServer.Common
         InterfaceDBError = 4005,
         NeedLogin = 4006,
         InvalidCode = 4007,
+        BlackList = 4008,
 
         InvalidEnvAndGroup = 5000,
         NoAccessForGroup = 5001,

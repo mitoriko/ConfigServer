@@ -157,7 +157,10 @@ namespace ConfigServer.Buss
         private Message CheckWhiteList(BaseApi baseApi, IPAddress iPAddress)
         {
             Message msg = null;
-            
+            if(iPAddress.ToString().Contains(Global.RouteIp))
+            {
+                msg = new Message(CodeMessage.BlackList, "BlackList");
+            }
             return msg;
         }
 
